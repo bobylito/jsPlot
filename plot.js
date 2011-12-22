@@ -1,42 +1,53 @@
-//JS PLOT (yet again)
+//!
+// Plot.js 0.1 beta 
+// http://bobylito.me/jsplot
+//
+// Licensed under MIT licence : http://bobylito.mit-license.org
 //
 // Library to plot functions in a 2D canvas.
 // 
 // Usage :
-// window.jsPlot(
-//    id, // id of the div container (String)
-//    settings, // setting of the plot, object containing the setting for the canvas and the plotting space (object)
-//    functions // array of functions to draw on the canvas. Functions must be of the form : float -> float
-// )
 //
-// Settings available : 
-//   Xmin : minimum x value of the plot (default value : 0)
-//   Xmax : maximum x value of the plot (default value : 10)
-//   Ymin : minimum y value of the plot (default value : 0)
-//   Ymax : maximum y value of the plot (default value : 3)
-//   xLabel : x axis label (default value : x) 
-//   yLabel : y axis label (default value : y)
-//   canvasHeight : canvas height in pixels (default value : 500)
-//   canvasWidth : canvas width in pixels (default value : 500)
+//     window.jsPlot(
+//        id,       // id of the div container (String)
+//        settings, // plot setting as an object
+//        functions // array of functions to draw on the canvas. 
+//                  // Functions must be of the form : float -> float
+//     )
 //
-// Example of use :
-// jsPlot(
-// "plotHere", 
-// {
-//   Xmin : -5,
-//   Xmax : 5,
-//   Ymin : -5,
-//   Ymax : 5,
-//   canvasHeight : 250,
-//   canvasWidth : 250
-// },
-// [function x(x){return x}, 
-// function x2(x){return x*x}]);
+//Settings available : 
+//
+// * Xmin : minimum x value of the plot (default value : 0)
+// * Xmax : maximum x value of the plot (default value : 10)
+// * Ymin : minimum y value of the plot (default value : 0)
+// * Ymax : maximum y value of the plot (default value : 3)
+// * xLabel : x axis label (default value : x) 
+// * yLabel : y axis label (default value : y)
+// * canvasHeight : canvas height in pixels (default value : 500)
+// * canvasWidth : canvas width in pixels (default value : 500)
+//
+//Example of use :
+//
+//     jsPlot(
+//       "plotHere", 
+//       {
+//         Xmin : -5,
+//         Xmax : 5,
+//         Ymin : -5,
+//          Ymax : 5,
+//         canvasHeight : 250,
+//         canvasWidth : 250
+//       },
+//     [function x(x){return x}, 
+//     function x2(x){return x*x}]);
+//
 
+
+// jsPlot is the function you'll use
 window.jsPlot =
 // w and d are respectively the window and the document; renamed here for ease of use.
   (function(w, d){
-    
+// All functions are stored in the utils object.
     var utils = {
 // extend is a function taken shamelessly from Zepto.js (https://github.com/madrobby/zepto)
       extend : function(target){
@@ -45,7 +56,9 @@ window.jsPlot =
         })
         return target;
       },
-// Given a dom id of an existing element, returns a reference to a 2d context of a newly created or the existing one if it has already been created. It also sets the size to the canvas.
+// Given a dom id of an existing element, returns a 2d context 
+// of either a newly created canvas or the existing one if it already exist. 
+// It also sets the size to the canvas with the width and height attributes of the object set.
       createCanvas : function(id, set){
         var e = d.getElementById(id);
         var canvas = e.getElementsByTagName("canvas")[0];
@@ -57,6 +70,9 @@ window.jsPlot =
         canvas.height=set.canvasHeight;
         return canvas.getContext("2d");
       },
+// Given a context c and the setting object set, the function draws the axis with labels.
+// This function uses the attributes Xmas, Xmin, Ymax, Ymin, xLabel and
+// yLabel of the setting objet.
       drawAxes : function(c, set){
         c.save()
         c.strokeStyle="#888";
@@ -94,7 +110,9 @@ window.jsPlot =
         c.fillText(set.yLabel,0 ,0);
         c.restore();
       },
-// Draw the grid on the canvas c given the parameters set 
+// Given a canvas c and the setting object set, this function draws the grid.
+// It uses the same set of setting parameters as the drawAxis function, except
+// for the labels.
       drawGrid : function(c, set){
         c.save();
         c.strokeStyle="#CCF";
@@ -113,7 +131,8 @@ window.jsPlot =
         c.stroke();
         c.restore();
       },
-// Draw a single function on the canvas c given the parameters set
+// Given a canvas c, the setting object set and the function func, this function plots
+// func on c in the respect of the parameters max and min of set.
       drawFunction: function(c, set, func){
         var start = set.Xmin * set.xscale;
         var stop = set.Xmax * set.xscale;
@@ -126,40 +145,34 @@ window.jsPlot =
         c.stroke();
       }
     }; 
-
 // Default configuration 
     var defaultConfig = {
-      Xmin : 0,
-      Xmax : 10,
-      Ymin : 0,
-      Ymax : 3,
-      xLabel : "x",
-      yLabel : "y",
-      canvasHeight : 500,
-      canvasWidth : 500
+      Xmin : 0,          // x minimum value
+      Xmax : 10,         // x maximum value
+      Ymin : 0,          // y minimum value
+      Ymax : 3,          // y maximum value
+      xLabel : "x",      // x label value (text written on the horizontal axis)
+      yLabel : "y",      // y label value (text written on the vertical axis)
+      canvasHeight : 500,// vertical size of the canvas
+      canvasWidth : 500  // horizontal size of the canvas
     };
 
 // plot.js main function
     return function(id, settings, funcZ){
-      var set = utils.extend({}, defaultConfig, settings);
-      
-      var X = set.X = set.Xmax - set.Xmin;
-      var Y = set.Y = set.Ymax - set.Ymin;
-
-      var xscale = set.xscale = set.canvasWidth/X;
-      var yscale = set.yscale = set.canvasHeight/Y;
-      
-      var c = utils.createCanvas(id, set);
-      //Axes redefinition
+      var set = utils.extend({}, defaultConfig, settings),
+          X = set.X = set.Xmax - set.Xmin,
+          Y = set.Y = set.Ymax - set.Ymin,
+          xscale = set.xscale = set.canvasWidth/X,
+          yscale = set.yscale = set.canvasHeight/Y, 
+          c = utils.createCanvas(id, set);
+// Axis redefinition 
       c.scale(1,-1);
       c.translate(0, -set.canvasHeight); //Finish axes changing properly
       c.translate(-(set.Xmin * xscale), -(set.Ymin * yscale) ); //Not 0,0 on bottom left :)  
-     
-      //Background 
+//Background 
       utils.drawGrid(c, set);
       utils.drawAxes(c, set);
-
-      //Tracé de la fonction
+//Draws all the functions
       for(var fi = 0; fi < funcZ.length; fi++){
         utils.drawFunction(c, set, funcZ[fi]);
       } 
