@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="plot.js"></script>
+    <style>
+      *{margin:0; padding:0; font-family: Helvetica, Calibri, sans-serif;}
+      body{background:#111; color:#FFF}
+      p{margin: 10px}
+      .sample{background:#EEE; float:left; margin: 10px; color: #333}
+      pre{font-family:monospace}
+      li{margin-left: 20px}
+    </style>
+  </head>
+  <body>
+    <h1>plot.js</h1>
+    <p>
+    plot.js is a library to create plots of functions.
+    </p>
+    <p>
+    Key features : 
+    <ul>
+      <li>Canvas based
+      <li>No other dependencies (no jQuery needed for instance)
+      <li>A unique function to plot all the graphs you want
+    </ul>
+    </p>
+    <div class="sample"><div id="plotHere"></div>
+<pre>jsPlot(
+  "plotHere", 
+  {
+    Xmin : -5,
+    Xmax : 5,
+    Ymin : -5,
+    Ymax : 5,
+    canvasHeight : 250,
+    canvasWidth : 250
+  },
+  [function x(x){return x}, 
+  function x2(x){return x*x}]);
+</pre>
+    </div>
+    <div class="sample"><div id="plotThere"></div>
+<pre>jsPlot(
+  "plotThere", 
+  {
+    Xmin : -5,
+    Xmax : 5,
+    Ymin : -5,
+    Ymax : 5,
+    canvasHeight : 250,
+    canvasWidth : 250
+  },
+  [function x3(x){return x*x*x},
+  function q(x){return 1/x}]);
+</pre>
+    </div>
+    <script type="application/javascript">
+      jsPlot(
+        "plotHere", 
+        {
+          Xmin : -5,
+          Xmax : 5,
+          Ymin : -5,
+          Ymax : 5,
+          canvasHeight : 250,
+          canvasWidth : 250
+        },
+        [function x(x){return x}, function x2(x){return x*x}]);
+      jsPlot(
+        "plotThere", 
+        {
+          Xmin : -5,
+          Xmax : 5,
+          Ymin : -5,
+          Ymax : 5,
+          canvasHeight : 250,
+          canvasWidth : 250
+        },
+        [function x3(x){return x*x*x}, function q(x){return 1/x}]);
+    </script>
+  </body>
+</html>

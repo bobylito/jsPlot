@@ -1,12 +1,10 @@
-//!
 // Plot.js 0.1 beta 
 // http://bobylito.me/jsplot
-//
 // Licensed under MIT licence : http://bobylito.mit-license.org
 //
 // Library to plot functions in a 2D canvas.
 // 
-// Usage :
+//## Usage :
 //
 //     window.jsPlot(
 //        id,       // id of the div container (String)
@@ -15,7 +13,7 @@
 //                  // Functions must be of the form : float -> float
 //     )
 //
-//Settings available : 
+//## Settings available : 
 //
 // * Xmin : minimum x value of the plot (default value : 0)
 // * Xmax : maximum x value of the plot (default value : 10)
@@ -26,7 +24,7 @@
 // * canvasHeight : canvas height in pixels (default value : 500)
 // * canvasWidth : canvas width in pixels (default value : 500)
 //
-//Example of use :
+//## Example of use :
 //
 //     jsPlot(
 //       "plotHere", 
@@ -40,8 +38,6 @@
 //       },
 //     [function x(x){return x}, 
 //     function x2(x){return x*x}]);
-//
-
 
 // jsPlot is the function you'll use
 window.jsPlot =
