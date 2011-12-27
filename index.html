@@ -4,11 +4,12 @@
     <script src="plot.js"></script>
     <style>
       *{margin:0; padding:0; font-family: Helvetica, Calibri, sans-serif;}
-      body{background:#111; color:#FFF}
+      html{text-align:center}
+      body{background:#111; color:#FFF; width:525px; text-align:left; margin:auto}
       p{margin: 10px}
-      .sample{display: inline-block; background:#EEE; margin: 10px 0 0 10px; color: #333}
-      pre{font-family:monospace}
       li{margin-left: 20px}
+      .sample{display: inline-block; background:#EEE; margin: 10px 0 0 10px; color: #333; vertical-align:top;}
+      .sample pre{width:250px; overflow:scroll;font-family:monospace}
     </style>
   </head>
   <body>
@@ -17,8 +18,11 @@
     plot.js is a <em>canvas</em> <em>based</em>, <em>one function</em>, <em>no dependency</em> library to create plots of functions by Alexandre Stanislawski (<a href="http://twitter.com/bobylito">@bobylito</a>) under <a href="http://bobylito.mit-license.org">MIT licence</a>. The code can be found on <a href="http://github.com/bobylito/jsPlot">github</a> and the documentation is <a href="http://bobylito.me/jsPlot/docs/plot.html">there</a>.
     </p>
     <h2>Samples : </h2>
-    <div class="sample"><div id="plotHere"></div>
-<pre>jsPlot(
+    <div class="sample">
+      <div id="plotHere"></div>
+      <pre></pre>
+      <script type="application/javascript">
+jsPlot(
   "plotHere", 
   {
     Xmin : -5,
@@ -29,11 +33,15 @@
     canvasWidth : 250
   },
   [function x(x){return x}, 
-  function x2(x){return x*x}]);
-</pre>
+   function x2(x){return x*x}]
+);
+      </script>
     </div>
-    <div class="sample"><div id="plotThere"></div>
-<pre>jsPlot(
+    <div class="sample">
+      <div id="plotThere"></div>
+      <pre></pre>
+      <script type="application/javascript">
+jsPlot(
   "plotThere", 
   {
     Xmin : -5,
@@ -43,33 +51,23 @@
     canvasHeight : 250,
     canvasWidth : 250
   },
-  [function x3(x){return x*x*x},
-  function q(x){return 1/x}]);
-</pre>
+  [function x3(x){
+      return x*x*x
+   },
+   function q(x){return 1/x}]
+);
+      </script>
     </div>
-    <script type="application/javascript">
-      jsPlot(
-        "plotHere", 
-        {
-          Xmin : -5,
-          Xmax : 5,
-          Ymin : -5,
-          Ymax : 5,
-          canvasHeight : 250,
-          canvasWidth : 250
-        },
-        [function x(x){return x}, function x2(x){return x*x}]);
-      jsPlot(
-        "plotThere", 
-        {
-          Xmin : -5,
-          Xmax : 5,
-          Ymin : -5,
-          Ymax : 5,
-          canvasHeight : 250,
-          canvasWidth : 250
-        },
-        [function x3(x){return x*x*x}, function q(x){return 1/x}]);
+    <script>
+      (function(){
+        var samples = document.querySelectorAll(".sample");
+        for(var i = 0; i < samples.length; i++){
+          var current = samples[i],
+              code = current.querySelector("pre"),
+              src = current.querySelector("script").innerHTML;
+          code.innerHTML=src.trim();
+        }
+      })();
     </script>
   </body>
 </html>
