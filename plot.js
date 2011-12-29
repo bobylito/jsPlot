@@ -23,6 +23,8 @@
 // * yLabel : y axis label (default value : y)
 // * canvasHeight : canvas height in pixels (default value : 500)
 // * canvasWidth : canvas width in pixels (default value : 500)
+// * gridDensity : defines the density of the grid. 0 is for drawing every unit, 0 every 5, -1 every 0.2 >> given x means every Math.pow(5, x). Default value(0)
+// * gridVisible : is the grid visible? (default value true)
 //
 //## Example of use :
 //
@@ -127,15 +129,19 @@ window.jsPlot =
 // Given a canvas c, the setting object set and the function func, this function plots
 // func on c in the respect of the parameters max and min of set.
       drawFunction: function(c, set, func){
-        var start = set.Xmin * set.xscale;
-        var stop = set.Xmax * set.xscale;
-        c.moveTo(start, func(start));
-        c.beginPath();
-        for(var i = start; i<=stop; i++){
-          var y = func(i/set.xscale);
-          c.lineTo(i, y*set.yscale);
+        try{
+          var start = set.Xmin * set.xscale;
+          var stop = set.Xmax * set.xscale;
+          c.moveTo(start, func(start));
+          c.beginPath();
+          for(var i = start; i<=stop; i++){
+            var y = func(i/set.xscale);
+            c.lineTo(i, y*set.yscale);
+          }
+          c.stroke();
+        }catch(e){
+          console.log("fonction en erreur", func, e);
         }
-        c.stroke();
       }
     }; 
 // Default configuration 
