@@ -113,14 +113,16 @@ window.jsPlot =
         c.save();
         c.strokeStyle="#CCF";
         c.beginPath();
-        for(var a=Math.floor(set.Xmin); a<set.Xmax; a++){
+        var step = Math.pow(5, set.gridDensity);
+        console.log(step);
+        for(var a=Math.floor(set.Xmin); a<set.Xmax; a+=step){
           c.moveTo(a*set.xscale, set.Ymin * set.yscale);
           c.lineTo(a*set.xscale, set.Ymax * set.yscale);
         }
         c.stroke();
 
         c.beginPath();
-        for(var b=Math.floor(set.Ymin); b<set.Ymax; b++){
+        for(var b=Math.floor(set.Ymin); b<set.Ymax; b+=step){
           c.moveTo(set.Xmin * set.xscale, b*set.yscale);
           c.lineTo(set.Xmax * set.xscale, b*set.yscale);
         }
@@ -150,7 +152,9 @@ window.jsPlot =
       xLabel : "x",      // x label value (text written on the horizontal axis)
       yLabel : "y",      // y label value (text written on the vertical axis)
       canvasHeight : 500,// vertical size of the canvas
-      canvasWidth : 500  // horizontal size of the canvas
+      canvasWidth : 500, // horizontal size of the canvas
+      gridDensity : 0,   // defines the density of the grid. 0 is for drawing every unit, 0 every 5, -1 every 0.2 >> given x means every Math.pow(5, x)
+      gridVisible : true // is the grid visible?
     };
 
 // plot.js main function
@@ -165,8 +169,10 @@ window.jsPlot =
       c.scale(1,-1);
       c.translate(0, -set.canvasHeight); //Finish axes changing properly
       c.translate(-(set.Xmin * xscale), -(set.Ymin * yscale) ); //Not 0,0 on bottom left :)  
-//Background 
-      utils.drawGrid(c, set);
+//Background
+      if(set.gridVisible){
+        utils.drawGrid(c, set);
+      }
       utils.drawAxes(c, set);
 //Draws all the functions
       for(var fi = 0; fi < funcZ.length; fi++){
