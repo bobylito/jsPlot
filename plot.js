@@ -42,16 +42,11 @@
 // jsPlot is the function you'll use
 window.jsPlot =
 // w and d are respectively the window and the document; renamed here for ease of use.
-  (function(w, d){
+  (function(w, d, extend){
+    "use strict";
 // All functions are stored in the utils object.
     var utils = {
-// extend is a function taken shamelessly from Zepto.js (https://github.com/madrobby/zepto)
-      extend : function(target){
-        [].slice.call(arguments, 1).forEach(function(source) {
-          for (key in source) target[key] = source[key];
-        })
-        return target;
-      },
+      extend : extend,
 // Given a dom id of an existing element, returns a 2d context 
 // of either a newly created canvas or the existing one if it already exist. 
 // It also sets the size to the canvas with the width and height attributes of the object set.
@@ -179,4 +174,11 @@ window.jsPlot =
         utils.drawFunction(c, set, funcZ[fi]);
       } 
     };
-   })(window, document);
+   })(window, document, 
+// extend is a function taken shamelessly from Zepto.js (https://github.com/madrobby/zepto). It does not comply to strict...
+        function(target){
+            [].slice.call(arguments, 1).forEach(function(source) {
+              for (key in source) target[key] = source[key];
+            })
+            return target;
+          });
