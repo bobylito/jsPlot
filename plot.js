@@ -23,8 +23,8 @@
 // * yLabel : y axis label (default value : y)
 // * canvasHeight : canvas height in pixels (default value : 500)
 // * canvasWidth : canvas width in pixels (default value : 500)
-// * gridDensity : defines the density of the grid. 0 is for drawing every unit, 0 every 5, -1 every 0.2 >> given x means every Math.pow(5, x). Default value(0)
-// * gridVisible : is the grid visible? (default value true)
+// * gridDensity : defines the density of the grid. 0 is for drawing every unit, 0 every 5, -1 every 0.2 >> given x means every Math.pow(5, x). (default value : 0)
+// * gridVisible : is the grid visible? (default value : true)
 //
 //## Example of use :
 //
@@ -43,8 +43,9 @@
 
 // jsPlot is the function you'll use
 window.jsPlot =
-// w and d are respectively the window and the document; renamed here for ease of use.
+// w and d are respectively the window and the document; renamed here for ease of use. extend is a function that is not strict compliant so it is not included in the declaration scope of the library.
   (function(w, d, extend){
+// Yes we can
     "use strict";
 // All functions are stored in the utils object.
     var utils = {
@@ -111,7 +112,6 @@ window.jsPlot =
         c.strokeStyle="#CCF";
         c.beginPath();
         var step = Math.pow(5, set.gridDensity);
-        console.log(step);
         for(var a=Math.floor(set.Xmin); a<set.Xmax; a+=step){
           c.moveTo(a*set.xscale, set.Ymin * set.yscale);
           c.lineTo(a*set.xscale, set.Ymax * set.yscale);
