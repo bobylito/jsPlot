@@ -112,14 +112,14 @@ window.jsPlot =
         c.strokeStyle="#CCF";
         c.beginPath();
         var step = Math.pow(5, set.gridDensity);
-        for(var a=Math.floor(set.Xmin); a<set.Xmax; a+=step){
+        for(var a=set.Xmin - set.Xmin%step; a<set.Xmax; a+=step){
           c.moveTo(a*set.xscale, set.Ymin * set.yscale);
           c.lineTo(a*set.xscale, set.Ymax * set.yscale);
         }
         c.stroke();
 
         c.beginPath();
-        for(var b=Math.floor(set.Ymin); b<set.Ymax; b+=step){
+        for(var b=set.Ymin - set.Ymin%step; b<set.Ymax; b+=step){
           c.moveTo(set.Xmin * set.xscale, b*set.yscale);
           c.lineTo(set.Xmax * set.xscale, b*set.yscale);
         }
@@ -130,12 +130,14 @@ window.jsPlot =
 // func on c in the respect of the parameters max and min of set.
       drawFunction: function(c, set, func){
         try{
-          var start = set.Xmin * set.xscale;
-          var stop = set.Xmax * set.xscale;
+          var start = set.Xmin * set.xscale, 
+              stop = set.Xmax * set.xscale;
           c.moveTo(start, func(start));
           c.beginPath();
           for(var i = start; i<=stop; i++){
             var y = func(i/set.xscale);
+            y = y < set.Ymin ? set.Ymin -1 : y;
+            y = y > set.Ymax ? set.Ymax + 1 : y;
             c.lineTo(i, y*set.yscale);
           }
           c.stroke();
