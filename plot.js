@@ -112,6 +112,7 @@ window.jsPlot =
         c.strokeStyle="#CCF";
         c.beginPath();
         var step = Math.pow(5, set.gridDensity);
+//The modulo is used to make the grid snap to the origin 
         for(var a=set.Xmin - set.Xmin%step; a<set.Xmax; a+=step){
           c.moveTo(a*set.xscale, set.Ymin * set.yscale);
           c.lineTo(a*set.xscale, set.Ymax * set.yscale);
@@ -119,6 +120,7 @@ window.jsPlot =
         c.stroke();
 
         c.beginPath();
+// The modulo is used for the same reason here
         for(var b=set.Ymin - set.Ymin%step; b<set.Ymax; b+=step){
           c.moveTo(set.Xmin * set.xscale, b*set.yscale);
           c.lineTo(set.Xmax * set.xscale, b*set.yscale);
@@ -136,6 +138,7 @@ window.jsPlot =
           c.beginPath();
           for(var i = start; i<=stop; i++){
             var y = func(i/set.xscale);
+//On FF there is a graphical glitch with very big position values. This cap these values so it doesn't grow too big.
             y = y < set.Ymin ? set.Ymin -1 : y;
             y = y > set.Ymax ? set.Ymax + 1 : y;
             c.lineTo(i, y*set.yscale);
@@ -168,11 +171,11 @@ window.jsPlot =
           xscale = set.xscale = set.canvasWidth/X,
           yscale = set.yscale = set.canvasHeight/Y, 
           c = utils.createCanvas(id, set);
-// Axis redefinition 
+// Axis redefinition : so it makes more sense afterwards. 
       c.scale(1,-1);
       c.translate(0, -set.canvasHeight); //Finish axes changing properly
       c.translate(-(set.Xmin * xscale), -(set.Ymin * yscale) ); //Not 0,0 on bottom left :)  
-//Background
+//Background drawing
       if(set.gridVisible){
         utils.drawGrid(c, set);
       }
