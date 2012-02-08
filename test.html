@@ -22,7 +22,7 @@ hiro.bind('test.onFailure', function(test, report){
   var arr = [[0,0], [1,1]],
       arr2 = [[0, 1], [1,1]],
       arr3 = [[1, 1], [2,1]],
-      arr4 = [[1, 1], [2,2]],
+      arr4 = [[1, 0], [2,1]],
       arr5 = [[1, 1], [2,2], [3,1]],
       f1 = jsPlot.tools.datasetToFunc(arr),
       f2 = jsPlot.tools.datasetToFunc(arr2),
@@ -41,9 +41,9 @@ hiro.bind('test.onFailure', function(test, report){
       this.assertEqual( f3(1), 1)
       this.assertEqual( f3(2), 1)
       
-      this.assertEqual( f4(1), 1)
-      this.assertEqual( f4(1.5), 1.5)
-      this.assertEqual( f4(2), 2)
+      this.assertEqual( f4(1), 0)
+      this.assertEqual( f4(1.5), 0.5)
+      this.assertEqual( f4(2), 1)
 
       this.assertEqual( f5(1), 1)
       this.assertEqual( f5(1.5), 1.5)
@@ -52,6 +52,12 @@ hiro.bind('test.onFailure', function(test, report){
       this.assertEqual( f5(3), 1)
     }
   });
+
+  f1.color = "#F00"
+  f2.color = "#0F0"
+  f3.color = "#00F"
+  f4.color = "#F0F"
+  f5.color = "#0FF"
 
   jsPlot("test", {Xmin : -1, Xmax:3, Ymin: -1, Ymax: 3}, [f1,f2,f3,f4,f5])
 })()

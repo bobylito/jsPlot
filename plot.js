@@ -130,10 +130,15 @@ window.jsPlot =
       },
 // Given a canvas c, the setting object set and the function func, this function plots
 // func on c in the respect of the parameters max and min of set.
+// If the function contains a color attribute, it will be used for rendering 
+// the function.
       drawFunction: function(c, set, func){
         try{
           var start = set.Xmin * set.xscale, 
-              stop = set.Xmax * set.xscale;
+              stop = set.Xmax * set.xscale,
+              oldStrokeStyle = c.strokeStyle,
+              color = func.color?func.color:"#000";
+          c.strokeStyle = color;
           c.moveTo(start, func(start));
           c.beginPath();
           for(var i = start; i<=stop; i++){
@@ -146,6 +151,8 @@ window.jsPlot =
           c.stroke();
         }catch(e){
           console.log("fonction en erreur", func, e);
+        }finally{
+          c.stokeStyle=oldStrokeStyle;
         }
       }
     }; 
@@ -188,7 +195,7 @@ window.jsPlot =
 
 // Misc tools for new possibilities
     lib.tools = {
-// Tranform a data set into functions
+// Tranform a data set (array of points) into a function that can be rendered in plot.js
       datasetToFunc: function(datas){
         var f = datas.reduce(function(memo, current, index, datas){
 // Verify next element 
