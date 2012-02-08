@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>jsPlot - tests</title>
+  <script type="text/javascript" src="hiro.js"></script>
+  <script type="text/javascript" src="plot.js"></script>
+  <script type="text/javascript">
+hiro.bind('test.onFailure', function(test, report){
+  console.log(test.name + " failed : was " + report.result + ", expected : " + report.expected + " (position : " + report.position + ")"  );
+})
+  </script>
+</head>
+<body onload="hiro.autorun()">
+
+<p>Results are in the console</p>
+
+<div id="test"></div>
+
+<script type="text/javascript">
+(function() {
+  var arr = [[0,0], [1,1]],
+      arr2 = [[0, 1], [1,1]],
+      arr3 = [[1, 1], [2,1]],
+      arr4 = [[1, 1], [2,2]],
+      arr5 = [[1, 1], [2,2], [3,1]],
+      f1 = jsPlot.tools.datasetToFunc(arr),
+      f2 = jsPlot.tools.datasetToFunc(arr2),
+      f3 = jsPlot.tools.datasetToFunc(arr3),
+      f4 = jsPlot.tools.datasetToFunc(arr4),
+      f5 = jsPlot.tools.datasetToFunc(arr5)
+
+  hiro.module('test', {
+    testDatasetToFunc : function(){
+      this.assertEqual( f1(0), 0)
+      this.assertEqual( f1(1), 1)
+
+      this.assertEqual( f2(0), 1)
+      this.assertEqual( f2(1), 1)
+      
+      this.assertEqual( f3(1), 1)
+      this.assertEqual( f3(2), 1)
+      
+      this.assertEqual( f4(1), 1)
+      this.assertEqual( f4(1.5), 1.5)
+      this.assertEqual( f4(2), 2)
+
+      this.assertEqual( f5(1), 1)
+      this.assertEqual( f5(1.5), 1.5)
+      this.assertEqual( f5(2), 2)
+      this.assertEqual( f5(2.5), 1.5)
+      this.assertEqual( f5(3), 1)
+    }
+  });
+
+  jsPlot("test", {Xmin : -1, Xmax:3, Ymin: -1, Ymax: 3}, [f1,f2,f3,f4,f5])
+})()
+</script>
+</body>
+</html>

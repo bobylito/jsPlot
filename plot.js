@@ -164,7 +164,7 @@ window.jsPlot =
     };
 
 // plot.js main function
-    return function(id, settings, funcZ){
+    var lib = function(id, settings, funcZ){
       var set = utils.extend({}, defaultConfig, settings),
           X = set.X = set.Xmax - set.Xmin,
           Y = set.Y = set.Ymax - set.Ymin,
@@ -185,6 +185,44 @@ window.jsPlot =
         utils.drawFunction(c, set, funcZ[fi]);
       } 
     };
+
+// Misc tools for new possibilities
+    lib.tools = {
+// Tranform a data set into functions
+      datasetToFunc: function(datas){
+        var f = datas.reduce(function(memo, current, index, datas){
+// Verify next element 
+              var next = datas[index+1];
+              if(next === undefined){
+                return function(x){
+                  if(x > current[0]){
+                    return undefined;
+                  }
+                  else {
+                    return memo(x) 
+                  }
+                }
+              }
+
+// Calculate parameters for the new function f(x) = ax + b
+              var a = (next[1] - current[1])/(next[0] - current[0]),
+                  b = current[1] - a * current[0],
+                  lowerBound = current[0],
+                  f =  function(x){
+                    if(x >= lowerBound){
+                      return a * x + b;
+                    }else{
+                      return memo(x);
+                    }
+                  };
+              console.log(a + "x + " + b)
+              return f;
+            }, function(x){return undefined;});
+        return f;
+      }
+    };
+
+    return lib;
    })(window, document, 
 // extend is a function taken shamelessly from Zepto.js (https://github.com/madrobby/zepto). It does not comply to strict...
         function(target){
