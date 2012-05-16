@@ -10,12 +10,13 @@
       li{margin-left: 20px}
       .sample{width:250px; display: inline-block; margin: 10px 0 0 10px; vertical-align:top;}
       .sample pre{width:250px; overflow:hidden;font-family:monospace}
+      .large, .large * {width:500px !important}
     </style>
   </head>
   <body>
     <h1>plot.js</h1>
     <p>
-    plot.js is a <em>canvas</em> <em>based</em>, <em>one function</em>, <em>no dependency</em> library to create plots of functions by Alexandre Stanislawski (<a href="http://twitter.com/bobylito">@bobylito</a>) under <a href="http://bobylito.mit-license.org">MIT licence</a>. The code can be found on <a href="http://github.com/bobylito/jsPlot">github</a> and the documentation is <a href="http://bobylito.me/jsPlot/docs/plot.html">there</a>.
+    plot.js is a <em>canvas based</em>, <em>one function</em>, <em>no dependency</em> library to create plots of functions by Alexandre Stanislawski (<a href="http://twitter.com/bobylito">@bobylito</a>) under <a href="http://bobylito.mit-license.org">MIT licence</a>. The code can be found on <a href="http://github.com/bobylito/jsPlot">github</a> and the documentation is <a href="http://bobylito.me/jsPlot/docs/plot.html">there</a>.
     </p>
     <h2>Samples : </h2>
     <div class="sample">
@@ -59,6 +60,31 @@ jsPlot(
 );
       </script>
     </div>
+
+    <div class="sample large">
+    	<div id="plotColors"></div>
+    	<pre></pre>
+        <script type="text/javascript">
+var f1 = function x3(x){ return x*x*x }, 
+    f2 = function q(x){ return x * Math.cos(x) }
+f1.color="#F00"
+f2.color="#00B"
+jsPlot(
+  "plotColors", 
+  {
+    Xmin : -10,
+    Xmax : 10,
+    Ymin : -10,
+    Ymax : 10,
+    canvasHeight : 500,
+    canvasWidth : 500, 
+    gridVisible : false
+  },
+  [f1, f2]
+);
+        </script>
+    </div>
+
     <script>
       (function(){
         var samples = document.querySelectorAll(".sample");
