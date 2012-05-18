@@ -64,6 +64,34 @@ window.jsPlot =
         canvas.height=set.canvasHeight;
         return canvas.getContext("2d");
       },
+// This function is from greweb's article about scaling grids : 
+// http://http://blog.greweb.fr/2012/03/chart-libraries-headaches-finding-the-best-grid-step/
+      findNiceRoundStep : (function() {
+        var log10 = Math.log(10.),
+            powOf10 = function(n) { 
+              return Math.floor(Math.log(n)/log10) 
+            };
+
+        return function(delta, preferedStep) {
+          var n = delta / preferedStep,
+              p = powOf10(n), 
+              p10 = Math.pow(10, p), 
+              digit = n/p10;
+
+          if(digit<1.5)
+            digit = 1;
+          else if(digit<3.5)
+            digit = 2;
+          else if(digit < 7.5)
+            digit = 5;
+          else {
+            p += 1;
+            p10 = Math.pow(10, p);
+            digit = 1;
+          }
+          return digit * p10;
+        };
+      })(),
 // Given a context c and the setting object set, the function draws the axis with labels.
 // This function uses the attributes Xmas, Xmin, Ymax, Ymin, xLabel and
 // yLabel of the setting objet.
@@ -109,9 +137,12 @@ window.jsPlot =
 // for the labels.
       drawGrid : function(c, set){
         c.save();
+        c.font = "15px helvetica";
         c.strokeStyle="#CCF";
+        c.lineWidth=1.0;
         c.beginPath();
-        var step = Math.pow(5, set.gridDensity);
+        var step = utils.findNiceRoundStep(set.Xmax - set.Xmin, 15);
+
 //The modulo is used to make the grid snap to the origin 
         for(var a=set.Xmin - set.Xmin%step; a<set.Xmax; a+=step){
           c.moveTo(a*set.xscale, set.Ymin * set.yscale);
@@ -126,6 +157,29 @@ window.jsPlot =
           c.lineTo(set.Xmax * set.xscale, b*set.yscale);
         }
         c.stroke();
+
+// Let's add some numbers on axes        
+        c.save();
+        c.rotate(-Math.PI)
+        c.scale(-1,1)
+        for(var a=set.Xmin - set.Xmin%(2 *step); a<set.Xmax; a += 2 * step){
+          c.fillText(
+              Math.round(a*1000000)/1000000, 
+              a * set.xscale, 
+              0);
+        }
+        c.rotate(-Math.PI/2)
+        for(var b=set.Ymin - set.Ymin%(2 * step); b<set.Ymax; b += 2 * step){
+          if(b === 0){
+            continue;
+          }
+          c.fillText(
+              Math.round(b*1000000)/1000000, 
+              b * set.yscale, 
+              0);
+        }
+        c.restore();
+        
         c.restore();
       },
 // Given a canvas c, the setting object set and the function func, this function plots
@@ -137,7 +191,9 @@ window.jsPlot =
           var start = set.Xmin * set.xscale, 
               stop = set.Xmax * set.xscale,
               oldStrokeStyle = c.strokeStyle,
-              color = func.color?func.color:"#000";
+              color = func.color?func.color:"#000",
+              width = func.width?func.width:1.0;
+          c.lineWidth=width;
           c.strokeStyle = color;
           c.moveTo(start, func(start));
           c.beginPath();
