@@ -170,11 +170,12 @@ window.jsPlot =
         }
         c.rotate(-Math.PI/2)
         for(var b=set.Ymin - set.Ymin%(2 * step); b<set.Ymax; b += 2 * step){
-          if(b === 0){
+          var bPrime = Math.round(b*1000000)/1000000;
+          if(bPrime === 0){
             continue;
           }
           c.fillText(
-              Math.round(b*1000000)/1000000, 
+              bPrime, 
               b * set.yscale, 
               0);
         }
