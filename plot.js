@@ -23,7 +23,6 @@
 // * yLabel : y axis label (default value : y)
 // * canvasHeight : canvas height in pixels (default value : 500)
 // * canvasWidth : canvas width in pixels (default value : 500)
-// * gridDensity : defines the density of the grid. 0 is for drawing every unit, 0 every 5, -1 every 0.2 >> given x means every Math.pow(5, x). (default value : 0)
 // * gridVisible : is the grid visible? (default value : true)
 //
 //## Example of use :
@@ -136,12 +135,13 @@ window.jsPlot =
 // It uses the same set of setting parameters as the drawAxis function, except
 // for the labels.
       drawGrid : function(c, set){
+        var step = utils.findNiceRoundStep(set.Xmax - set.Xmin, 15);
+        
         c.save();
         c.font = "15px helvetica";
         c.strokeStyle="#CCF";
         c.lineWidth=1.0;
         c.beginPath();
-        var step = utils.findNiceRoundStep(set.Xmax - set.Xmin, 15);
 
 //The modulo is used to make the grid snap to the origin 
         for(var a=set.Xmin - set.Xmin%step; a<set.Xmax; a+=step){
@@ -223,7 +223,6 @@ window.jsPlot =
       yLabel : "y",      // y label value (text written on the vertical axis)
       canvasHeight : 500,// vertical size of the canvas
       canvasWidth : 500, // horizontal size of the canvas
-      gridDensity : 0,   // defines the density of the grid. 0 is for drawing every unit, 0 every 5, -1 every 0.2 >> given x means every Math.pow(5, x)
       gridVisible : true // is the grid visible?
     };
 
@@ -283,6 +282,15 @@ window.jsPlot =
               return f;
             }, function(x){return undefined;});
         return f;
+      },
+//Calculate the values on the grid step
+      funcToDataset : function(f, settings){
+        var step = utils.findNiceRoundStep(settings.Xmax - settings.Xmin, 15),
+            res = [];
+        for(var a=settings.Xmin - settings.Xmin%step; a<settings.Xmax; a+=step){
+          res.push( f(a) );
+        }
+        return res;
       }
     };
 
