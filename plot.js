@@ -207,7 +207,7 @@ window.jsPlot =
           }
           c.stroke();
         }catch(e){
-          console.log("fonction en erreur", func, e);
+          //console.log("fonction en erreur", func, e);
         }finally{
           c.stokeStyle=oldStrokeStyle;
         }
@@ -278,7 +278,6 @@ window.jsPlot =
                       return memo(x);
                     }
                   };
-              console.log(a + "x + " + b)
               return f;
             }, function(x){return undefined;});
         return f;
